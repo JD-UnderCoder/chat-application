@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  /* Business dark green + white theme */
+  --background: #081a14; /* deep green-black */
+  --foreground: #e7f6ef; /* minty white */
+  --card: #0d2a20; /* card surface */
+  --muted: #94b8a8; /* muted text */
+  --primary: #16a34a; /* emerald-600 */
+  --primary-700: #15803d; /* emerald-700 */
+  --primary-800: #166534; /* emerald-800 */
+  --ring: #34d399; /* emerald-400 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-plus-jakarta);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #ffffff;
+    --foreground: #0b1f17;
+    --card: #f7faf8;
+    --muted: #4b6658;
+    --primary: #16a34a;
+    --primary-700: #15803d;
+    --primary-800: #166534;
+    --ring: #34d399;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(1200px 800px at -10% -10%, #0b2a21 0%, transparent 50%),
+              radial-gradient(1000px 700px at 110% 10%, #0d3b2c 0%, transparent 55%),
+              var(--background);
+  color: var(--foreground);
+  font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/********************
+  UI PRIMITIVES
+*********************/
+.card {
+  @apply rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] bg-card border border-white/5 backdrop-blur-sm;
+}
+.card-hover {
+  @apply transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)];
+}
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium text-white bg-primary hover:bg-primary-700 active:bg-primary-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[var(--ring)];
+}
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium text-[var(--foreground)]/80 hover:bg-white/5 transition-colors duration-200;
+}
+.input {
+  @apply w-full rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-[var(--foreground)] placeholder-[var(--foreground)]/40 focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent;
+}
+
+.scroll-gradient {
+  mask-image: linear-gradient(to bottom, transparent, black 16px, black calc(100% - 16px), transparent);
+}
+
+/* Chat bubbles */
+.bubble-me {
+  @apply bg-gradient-to-br from-emerald-500 to-emerald-600 text-white;
+}
+.bubble-them {
+  @apply bg-white/10 text-[var(--foreground)] backdrop-blur-sm;
+}
