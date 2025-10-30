@@ -1,0 +1,52 @@
+[00:00:01.775] Server  LOG      ✓ Ready in 1264ms
+[00:00:07.268] Server  LOG      ○ Compiling /auth ...
+[00:00:10.522] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:39.891] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:10.607] Browser WARN    [2025-10-30T19:49:16.788Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6de transport errored. Name: undefined Message: undefined
+[00:07:10.795] Browser WARN    [2025-10-30T19:49:16.976Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6df transport errored. Name: undefined Message: undefined
+[00:07:11.374] Browser WARN    [2025-10-30T19:49:17.542Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6e0 transport errored. Name: undefined Message: undefined
+[00:07:11.861] Browser WARN    [2025-10-30T19:49:18.033Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e1 transport errored. Name: undefined Message: undefined
+[00:07:12.012] Browser WARN    [2025-10-30T19:49:18.192Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e2 transport errored. Name: undefined Message: undefined
+[00:07:12.349] Browser WARN    [2025-10-30T19:49:18.524Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6e3 transport errored. Name: undefined Message: undefined
+[00:07:13.459] Browser WARN    [2025-10-30T19:49:19.635Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e4 transport errored. Name: undefined Message: undefined
+[00:07:13.977] Browser WARN    [2025-10-30T19:49:20.145Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6e5 transport errored. Name: undefined Message: undefined
+[00:07:16.110] Browser WARN    [2025-10-30T19:49:22.288Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e6 transport errored. Name: undefined Message: undefined
+[00:07:17.519] Browser WARN    [2025-10-30T19:49:23.610Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6e7 transport errored. Name: undefined Message: undefined
+[00:07:17.519] Browser WARN    [2025-10-30T19:49:23.690Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e8 transport errored. Name: undefined Message: undefined
+[00:07:19.674] Browser WARN    [2025-10-30T19:49:25.851Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6e9 transport errored. Name: undefined Message: undefined
+[00:07:20.554] Browser WARN    [2025-10-30T19:49:26.727Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6ea transport errored. Name: undefined Message: undefined
+[00:07:24.016] Browser WARN    [2025-10-30T19:49:30.194Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6eb transport errored. Name: undefined Message: undefined
+[00:07:29.218] Browser WARN    [2025-10-30T19:49:35.395Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x5ea0c6ec transport errored. Name: undefined Message: undefined
+[00:07:31.340] Browser WARN    [2025-10-30T19:49:37.520Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x5ea0c6ed transport errored. Name: undefined Message: undefined
+[00:07:34.409] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:37.086] Browser ERROR   Each child in a list should have a unique "key" prop.%s%s See https://react.dev/link/warning-keys for more information. 
+
+Check the render method of `Sidebar`. 
+[00:07:37.293] Browser WARN    [2025-10-30T19:49:43.463Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfeb8 transport errored. Name: undefined Message: undefined
+[00:07:37.293] Browser WARN    [2025-10-30T19:49:43.467Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfeb9 transport errored. Name: undefined Message: undefined
+[00:07:37.511] Browser WARN    [2025-10-30T19:49:43.684Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfeba transport errored. Name: undefined Message: undefined
+[00:07:37.512] Browser WARN    [2025-10-30T19:49:43.692Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfebb transport errored. Name: undefined Message: undefined
+[00:07:38.093] Browser WARN    [2025-10-30T19:49:44.274Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfebc transport errored. Name: undefined Message: undefined
+[00:07:38.455] Browser WARN    [2025-10-30T19:49:44.635Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfebd transport errored. Name: undefined Message: undefined
+[00:07:40.018] Browser WARN    [2025-10-30T19:49:46.196Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfebe transport errored. Name: undefined Message: undefined
+[00:07:40.181] Browser WARN    [2025-10-30T19:49:46.355Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfebf transport errored. Name: undefined Message: undefined
+[00:07:41.652] Browser WARN    [2025-10-30T19:49:47.833Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfec0 transport errored. Name: undefined Message: undefined
+[00:07:43.013] Browser WARN    [2025-10-30T19:49:49.194Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfec1 transport errored. Name: undefined Message: undefined
+[00:07:45.858] Browser WARN    [2025-10-30T19:49:52.033Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfec2 transport errored. Name: undefined Message: undefined
+[00:07:46.883] Browser WARN    [2025-10-30T19:49:53.057Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfec3 transport errored. Name: undefined Message: undefined
+[00:07:49.866] Browser WARN    [2025-10-30T19:49:56.043Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfec4 transport errored. Name: undefined Message: undefined
+[00:07:50.925] Browser WARN    [2025-10-30T19:49:57.093Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfec5 transport errored. Name: undefined Message: undefined
+[00:07:58.594] Browser WARN    [2025-10-30T19:50:04.774Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfec6 transport errored. Name: undefined Message: undefined
+[00:08:00.311] Browser WARN    [2025-10-30T19:50:06.475Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfec7 transport errored. Name: undefined Message: undefined
+[00:08:10.980] Browser WARN    [2025-10-30T19:50:17.144Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfec8 transport errored. Name: undefined Message: undefined
+[00:08:12.661] Browser WARN    [2025-10-30T19:50:18.833Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfec9 transport errored. Name: undefined Message: undefined
+[00:08:18.686] Browser ERROR   unhandledRejection: FirebaseError: Function setDoc() called with invalid data. Unsupported field value: undefined (found in document conversations/bglTlHfsf9OoG8LHal1r6IUJzYu2__)
+[00:08:19.530] Browser ERROR   unhandledRejection: FirebaseError: Function setDoc() called with invalid data. Unsupported field value: undefined (found in document conversations/bglTlHfsf9OoG8LHal1r6IUJzYu2__)
+[00:08:19.715] Browser ERROR   unhandledRejection: FirebaseError: Function setDoc() called with invalid data. Unsupported field value: undefined (found in document conversations/bglTlHfsf9OoG8LHal1r6IUJzYu2__)
+[00:08:21.279] Browser WARN    [2025-10-30T19:50:27.459Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfeca transport errored. Name: undefined Message: undefined
+[00:08:29.014] Browser WARN    [2025-10-30T19:50:34.466Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfecb transport errored. Name: undefined Message: undefined
+[00:08:45.027] Browser WARN    [2025-10-30T19:50:50.472Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfecc transport errored. Name: undefined Message: undefined
+[00:09:00.032] Browser WARN    [2025-10-30T19:51:05.474Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfecd transport errored. Name: undefined Message: undefined
+[00:09:13.015] Browser WARN    [2025-10-30T19:51:18.702Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfece transport errored. Name: undefined Message: undefined
+[00:09:47.015] Browser WARN    [2025-10-30T19:51:52.579Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Listen' stream 0x6dbbfecf transport errored. Name: undefined Message: undefined
+[00:10:07.014] Browser WARN    [2025-10-30T19:52:12.498Z]  @firebase/firestore: Firestore (12.5.0): WebChannelConnection RPC 'Write' stream 0x6dbbfed0 transport errored. Name: undefined Message: undefined

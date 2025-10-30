@@ -2,13 +2,15 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// Firebase Web App configuration (public keys)
+// Provided by user; these are safe to include in client code.
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+  apiKey: "AIzaSyChtoK_4wBcsLZiaXF-s_ksQBwxHPfZhs4",
+  authDomain: "chat-application-1d2dc.firebaseapp.com",
+  projectId: "chat-application-1d2dc",
+  storageBucket: "chat-application-1d2dc.firebasestorage.app",
+  messagingSenderId: "611424434957",
+  appId: "1:611424434957:web:5b6e6044f296ceadf5ce44",
 };
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
