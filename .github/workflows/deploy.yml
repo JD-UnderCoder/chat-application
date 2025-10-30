@@ -1,0 +1,64 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate secrets and Firebase config
+        shell: bash
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: chat-application-1d2dc
+        run: |
+          set -euo pipefail
+          if [ -z "${FIREBASE_TOKEN:-}" ]; then
+            echo "FIREBASE_TOKEN is not set as a repository secret." >&2
+            exit 1
+          fi
+          [ -f firebase.json ] || { echo "firebase.json not found at repo root" >&2; exit 1; }
+          [ -f .firebaserc ] || { echo ".firebaserc not found at repo root" >&2; exit 1; }
+          [ -d public ] || { echo "public directory not found (hosting.public=public)" >&2; exit 1; }
+          node -e "const fs=require('fs');JSON.parse(fs.readFileSync('firebase.json','utf8'));console.log('firebase.json valid JSON')"
+          node -e "const fs=require('fs');const rc=JSON.parse(fs.readFileSync('.firebaserc','utf8'));if(!rc.projects||!rc.projects.default){console.error('default project missing in .firebaserc');process.exit(1)};if(rc.projects.default!=='${PROJECT_ID}'){console.error(`.firebaserc default (${rc.projects.default}) != ${PROJECT_ID}`);process.exit(1)};console.log('.firebaserc project OK')"
+          echo "Secrets and config files present."
+
+      - name: Verify tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          node -v
+          npm -v
+          npm i -g firebase-tools@13
+          firebase --version
+
+      - name: Verify access to Firebase project
+        shell: bash
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          firebase projects:list --json > projects.json
+          node -e "const fs=require('fs');const pid='chat-application-1d2dc';const txt=fs.readFileSync('projects.json','utf8')||'{}';const data=JSON.parse(txt);const arr=(data.result||data.projects||[]);if(!arr.some(p=>p.projectId===pid)){console.error('Token does not have access to project: '+pid);process.exit(1)} else {console.log('Verified access to project: '+pid)}"
+
+      # No build step since repo currently serves static files from public/
+      - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@v13.22.0
+        with:
+          args: deploy --only hosting --project chat-application-1d2dc --non-interactive --debug
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
