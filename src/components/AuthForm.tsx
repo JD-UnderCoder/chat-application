@@ -41,6 +41,7 @@ export default function AuthForm() {
           uid: cred.user.uid,
           email: email,
           displayName: (name || email.split("@")[0]).trim(),
+          name: (name || email.split("@")[0]).trim().toLowerCase(),
           photoURL: cred.user.photoURL || "",
           lastSeen: Date.now(),
           createdAt: serverTimestamp(),

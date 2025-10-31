@@ -20,6 +20,7 @@ export default function AuthPage() {
         uid: user.uid,
         email,
         displayName,
+        name: displayName.toLowerCase(),
         photoURL,
         lastSeen: Date.now(),
         updatedAt: serverTimestamp(),

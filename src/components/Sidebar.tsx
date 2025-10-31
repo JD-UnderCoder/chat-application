@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { collection, onSnapshot, orderBy, query, doc, setDoc } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, doc, setDoc, startAt, endAt } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
@@ -13,10 +13,11 @@ import { useRouter } from "next/navigation";
 
 export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { onSelect: (uid: string) => void; selectedUid?: string | null; isMobile?: boolean; onClose?: () => void }) {
   const [user] = useAuthState(auth);
-  const [users, setUsers] = React.useState<{ uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; }[]>([]);
+  const [users, setUsers] = React.useState<{ uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; }[]>([]);
   const [now, setNow] = React.useState<number>(0);
   const [search, setSearch] = React.useState("");
   const [debounced, setDebounced] = React.useState("");
+  const [searchResults, setSearchResults] = React.useState<typeof users | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
   const router = useRouter();
@@ -24,7 +25,7 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
   React.useEffect(() => {
     const q = query(collection(db, "users"), orderBy("lastSeen", "desc"));
     const unsub = onSnapshot(q, (snap) => {
-      setUsers(snap.docs.map((d) => d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; }));
+      setUsers(snap.docs.map((d) => d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; }));
     });
     return () => unsub();
   }, []);
@@ -34,6 +35,22 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
     const id = setTimeout(() => setDebounced(search.trim().toLowerCase()), 200);
     return () => clearTimeout(id);
   }, [search]);
+
+  // Firestore prefix search on `name` when there is a search term
+  React.useEffect(() => {
+    if (!debounced) { setSearchResults(null); return; }
+    const q = query(
+      collection(db, "users"),
+      orderBy("name"),
+      startAt(debounced),
+      endAt(debounced + "\uf8ff")
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      const rows = snap.docs.map((d) => d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; });
+      setSearchResults(rows);
+    });
+    return () => unsub();
+  }, [debounced]);
 
   React.useEffect(() => {
     setNow(Date.now());
@@ -55,17 +72,17 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
   }
 
   const base = React.useMemo(() => users.filter(u => u.uid !== user?.uid), [users, user?.uid]);
-  const filtered = React.useMemo(() => {
-    if (!debounced) return base;
-    return base.filter(u =>
-      (u.displayName || "").toLowerCase().includes(debounced) ||
-      (u.email || "").toLowerCase().includes(debounced)
-    );
-  }, [base, debounced]);
+  const displayed = React.useMemo(() => {
+    if (debounced && searchResults) {
+      return searchResults.filter(u => u.uid !== user?.uid);
+    }
+    return base;
+  }, [base, debounced, searchResults, user?.uid]);
 
   const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && filtered.length > 0) {
-      startChat(filtered[0].uid);
+    if (e.key === "Enter") {
+      const list = displayed;
+      if (list.length > 0) startChat(list[0].uid);
     }
   };
 
@@ -160,11 +177,11 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
         <div className="mt-3 border-b border-white/10" />
       </div>
       <div className="flex-1 space-y-2 overflow-y-auto pr-2 pt-2 scroll-gradient">
-        {filtered.length === 0 ? (
+        {displayed.length === 0 ? (
           <div className="mt-3 text-xs text-[var(--color-muted)] px-1">No user found</div>
         ) : (
           <AnimatePresence initial={false}>
-            {filtered.map((u) => (
+            {displayed.map((u) => (
               <motion.button
                 key={u.uid}
                 onClick={() => startChat(u.uid)}
