@@ -101,3 +101,18 @@ body {
 .input-bar {
   @apply rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] px-3 py-2;
 }
+
+/* Post-login theme override: force white text and dark background */
+.post-login {
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted: #ffffff;
+}
+.post-login .logo, .post-login .logo img, .post-login .logo svg {
+  filter: brightness(0) invert(1);
+}
+
+/* Mobile floating action button */
+.mobile-fab {
+  @apply fixed md:hidden bottom-5 right-5 h-12 w-12 rounded-full bg-primary text-white shadow-lg grid place-items-center border border-white/10;
+}

@@ -8,6 +8,7 @@ import { ChatWindow } from "@/components/ChatWindow";
 import { doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import type { UserDoc } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
+import { Search, MessageSquare } from "lucide-react";
 
 export default function ChatPage() {
   const [user, loading] = useAuthState(auth);
@@ -92,6 +93,15 @@ const unsub = onSnapshot(doc(db, "users", selectedUid), (snap) => setOtherUser(s
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Floating toggle button (mobile only) */}
+      <button
+        className="mobile-fab"
+        aria-label={showSidebar ? "Go to chat" : "Open search"}
+        onClick={() => setShowSidebar((v) => !v)}
+      >
+        {showSidebar ? <MessageSquare size={22} /> : <Search size={22} />}
+      </button>
 
       <main className="flex-1 flex flex-col">
         {!selectedUid ? (
