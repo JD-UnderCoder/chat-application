@@ -8,7 +8,7 @@ import { Avatar } from "./Avatar";
 import { conversationIdFromUids } from "@/lib/conversations";
 import { LogoutButton } from "./LogoutButton";
 import { AnimatePresence, motion } from "framer-motion";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { onSelect: (uid: string) => void; selectedUid?: string | null; isMobile?: boolean; onClose?: () => void }) {
@@ -17,6 +17,7 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
   const [now, setNow] = React.useState<number>(0);
   const [search, setSearch] = React.useState("");
   const [debounced, setDebounced] = React.useState("");
+  const [activeTerm, setActiveTerm] = React.useState("");
   const [searchResults, setSearchResults] = React.useState<typeof users | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
@@ -30,27 +31,44 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
     return () => unsub();
   }, []);
 
-  // Debounce search for smoother filtering
+  // Debounce search for smoother typing, updates the activeTerm used by queries
   React.useEffect(() => {
     const id = setTimeout(() => setDebounced(search.trim().toLowerCase()), 200);
     return () => clearTimeout(id);
   }, [search]);
+  React.useEffect(() => { setActiveTerm(debounced); }, [debounced]);
 
-  // Firestore prefix search on `name` when there is a search term
+  // Firestore real-time prefix search on `name` and `emailLower` when there is an active term
   React.useEffect(() => {
-    if (!debounced) { setSearchResults(null); return; }
-    const q = query(
+    if (!activeTerm) { setSearchResults(null); return; }
+    const nameQ = query(
       collection(db, "users"),
       orderBy("name"),
-      startAt(debounced),
-      endAt(debounced + "\uf8ff")
+      startAt(activeTerm),
+      endAt(activeTerm + "\uf8ff")
     );
-    const unsub = onSnapshot(q, (snap) => {
-      const rows = snap.docs.map((d) => d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; });
-      setSearchResults(rows);
+    const emailQ = query(
+      collection(db, "users"),
+      orderBy("emailLower"),
+      startAt(activeTerm),
+      endAt(activeTerm + "\uf8ff")
+    );
+    const merge = (prev: typeof users | null, snap: any) => {
+      const map = new Map((prev || []).map((u) => [u.uid, u] as const));
+      snap.docs.forEach((d: any) => {
+        const data = d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; emailLower?: string; };
+        map.set(data.uid, data);
+      });
+      return Array.from(map.values());
+    };
+    let unsub1 = onSnapshot(nameQ, (snap) => {
+      setSearchResults((prev) => merge(prev, snap));
     });
-    return () => unsub();
-  }, [debounced]);
+    let unsub2 = onSnapshot(emailQ, (snap) => {
+      setSearchResults((prev) => merge(prev, snap));
+    });
+    return () => { unsub1(); unsub2(); };
+  }, [activeTerm]);
 
   React.useEffect(() => {
     setNow(Date.now());
@@ -81,6 +99,8 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
 
   const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      const term = search.trim().toLowerCase();
+      if (term) setActiveTerm(term);
       const list = displayed;
       if (list.length > 0) startChat(list[0].uid);
     }
@@ -165,14 +185,26 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
       )}
       {/* Search bar */}
       <div>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={onSearchKeyDown}
-          placeholder="Search by Gmail or name..."
-          className="input"
-          aria-label="Search users"
-        />
+        <div className="relative">
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={onSearchKeyDown}
+            placeholder="Search by Gmail or name..."
+            className="input pr-10"
+            aria-label="Search users"
+          />
+          <button
+            aria-label="Run search"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg bg-white/5 border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+            onClick={() => {
+              const term = search.trim().toLowerCase();
+              if (term) setActiveTerm(term);
+            }}
+          >
+            <Search size={16} />
+          </button>
+        </div>
         {/* Divider */}
         <div className="mt-3 border-b border-white/10" />
       </div>

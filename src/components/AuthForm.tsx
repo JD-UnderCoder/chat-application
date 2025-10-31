@@ -40,6 +40,7 @@ export default function AuthForm() {
         await setDoc(doc(db, "users", cred.user.uid), {
           uid: cred.user.uid,
           email: email,
+          emailLower: email.trim().toLowerCase(),
           displayName: (name || email.split("@")[0]).trim(),
           name: (name || email.split("@")[0]).trim().toLowerCase(),
           photoURL: cred.user.photoURL || "",

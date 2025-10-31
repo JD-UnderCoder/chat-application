@@ -19,6 +19,7 @@ export default function AuthPage() {
       const data = {
         uid: user.uid,
         email,
+        emailLower: email.trim().toLowerCase(),
         displayName,
         name: displayName.toLowerCase(),
         photoURL,
