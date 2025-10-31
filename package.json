@@ -6,6 +6,7 @@
                     "dev":  "next dev",
                     "build":  "next build",
                     "export":  "next export",
+                    "out":  "next build && next export",
                     "start":  "next start",
                     "lint":  "eslint",
                     "deploy:hosting":  "npm run build \u0026\u0026 firebase deploy --only hosting --project chat-application-1d2dc"
