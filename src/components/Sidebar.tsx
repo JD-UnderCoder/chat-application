@@ -41,6 +41,7 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
   // Firestore real-time prefix search on `name` and `emailLower` when there is an active term
   React.useEffect(() => {
     if (!activeTerm) { setSearchResults(null); return; }
+    console.log("Search: running Firestore queries", { activeTerm });
     const nameQ = query(
       collection(db, "users"),
       orderBy("name"),
@@ -53,7 +54,8 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
       startAt(activeTerm),
       endAt(activeTerm + "\uf8ff")
     );
-    const merge = (prev: typeof users | null, snap: any) => {
+    const merge = (prev: typeof users | null, snap: any, label: string) => {
+      console.log("Search: snapshot", label, { count: snap.docs.length, ids: snap.docs.map((d: any) => d.id).slice(0, 5) });
       const map = new Map((prev || []).map((u) => [u.uid, u] as const));
       snap.docs.forEach((d: any) => {
         const data = d.data() as { uid: string; email: string; displayName: string; photoURL?: string; lastSeen?: number; name?: string; emailLower?: string; };
@@ -62,10 +64,10 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
       return Array.from(map.values());
     };
     let unsub1 = onSnapshot(nameQ, (snap) => {
-      setSearchResults((prev) => merge(prev, snap));
+      setSearchResults((prev) => merge(prev, snap, "name"));
     });
     let unsub2 = onSnapshot(emailQ, (snap) => {
-      setSearchResults((prev) => merge(prev, snap));
+      setSearchResults((prev) => merge(prev, snap, "emailLower"));
     });
     return () => { unsub1(); unsub2(); };
   }, [activeTerm]);
@@ -91,8 +93,17 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
 
   const base = React.useMemo(() => users.filter(u => u.uid !== user?.uid), [users, user?.uid]);
   const displayed = React.useMemo(() => {
-    if (debounced && searchResults) {
-      return searchResults.filter(u => u.uid !== user?.uid);
+    if (debounced) {
+      // Merge Firestore results with a client-side fallback filter for docs missing `name`/`emailLower`
+      const fallback = base.filter(u =>
+        (u.displayName || "").toLowerCase().includes(debounced) ||
+        (u.email || "").toLowerCase().includes(debounced)
+      );
+      const map = new Map<string, typeof base[number]>();
+      (searchResults || []).forEach(u => { if (u.uid !== user?.uid) map.set(u.uid, u); });
+      fallback.forEach(u => { if (u.uid !== user?.uid) map.set(u.uid, u); });
+      const merged = Array.from(map.values());
+      return merged;
     }
     return base;
   }, [base, debounced, searchResults, user?.uid]);
@@ -100,6 +111,7 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
   const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const term = search.trim().toLowerCase();
+      console.log("Search: Enter pressed", { term });
       if (term) setActiveTerm(term);
       const list = displayed;
       if (list.length > 0) startChat(list[0].uid);
@@ -199,6 +211,7 @@ export function Sidebar({ onSelect, selectedUid, isMobile = false, onClose }: { 
             className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg bg-white/5 border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
             onClick={() => {
               const term = search.trim().toLowerCase();
+              console.log("Search: icon clicked", { term });
               if (term) setActiveTerm(term);
             }}
           >
