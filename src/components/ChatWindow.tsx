@@ -10,6 +10,7 @@ import { auth } from "@/lib/firebase";
 import { Send, Smile, Paperclip, ArrowLeft } from "lucide-react";
 import { LogoutButton } from "./LogoutButton";
 import type { DocumentSnapshot } from "firebase/firestore";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function ChatWindow({ otherUser, onOpenSidebar }: { otherUser?: { uid: string; displayName: string; email: string; photoURL?: string } | null, onOpenSidebar?: () => void }) {
   const [user] = useAuthState(auth);
@@ -18,6 +19,9 @@ export function ChatWindow({ otherUser, onOpenSidebar }: { otherUser?: { uid: st
   const [otherTyping, setOtherTyping] = React.useState(false);
   const bottomRef = React.useRef<HTMLDivElement | null>(null);
   const typingTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
+  const logoutTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingLogoutRef = React.useRef<null | (() => Promise<void>)>(null);
 
   React.useEffect(() => {
     if (!user?.uid || !otherUser?.uid) return;
@@ -89,7 +93,12 @@ export function ChatWindow({ otherUser, onOpenSidebar }: { otherUser?: { uid: st
                   </div>
                 </div>
               )}
-              <LogoutButton />
+              <LogoutButton onRequestInlineConfirm={(run) => {
+                pendingLogoutRef.current = run;
+                setShowLogoutConfirm(true);
+                if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
+                logoutTimerRef.current = setTimeout(() => setShowLogoutConfirm(false), 5000);
+              }} />
             </div>
           </>
         ) : (
@@ -99,6 +108,36 @@ export function ChatWindow({ otherUser, onOpenSidebar }: { otherUser?: { uid: st
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 scroll-gradient">
+        {/* Inline logout confirmation bubble */}
+        <AnimatePresence>
+          {showLogoutConfirm && (
+            <motion.div
+              className="flex justify-center"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+            >
+              <div className="max-w-[88%] md:max-w-[60%] bubble-them rounded-2xl rounded-bl-md px-4 py-3 backdrop-blur-md">
+                <div className="text-sm">Are you sure you want to logout?</div>
+                <div className="mt-2 flex items-center gap-2 flex-wrap">
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm"
+                    onClick={() => { setShowLogoutConfirm(false); if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current); pendingLogoutRef.current?.(); }}
+                  >
+                    Yes, Logout
+                  </button>
+                  <button
+                    className="btn-ghost px-3 py-1.5 rounded-lg"
+                    onClick={() => { setShowLogoutConfirm(false); if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current); }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {messages.map((m, i) => {
           const prev = messages[i - 1];
           const showAvatar = !prev || prev.senderId !== m.senderId;

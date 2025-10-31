@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 type Variant = "danger" | "ghost";
 
-export function LogoutButton({ className = "", variant = "danger" }: { className?: string; variant?: Variant }) {
+export function LogoutButton({ className = "", variant = "danger", onRequestInlineConfirm }: { className?: string; variant?: Variant; onRequestInlineConfirm?: (confirm: () => Promise<void>) => void }) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -30,7 +30,13 @@ export function LogoutButton({ className = "", variant = "danger" }: { className
   return (
     <>
       <button
-        onClick={() => setConfirmOpen(true)}
+        onClick={() => {
+          if (onRequestInlineConfirm) {
+            onRequestInlineConfirm(handleLogout);
+          } else {
+            setConfirmOpen(true);
+          }
+        }}
         disabled={loading}
         className={`${variant === "danger" ? "bg-red-500 hover:bg-red-600 text-white" : "btn-ghost"} px-3 py-1 rounded-lg text-sm transition-colors disabled:opacity-60 ${className}`}
         aria-label="Logout"
